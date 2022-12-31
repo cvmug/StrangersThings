@@ -1,0 +1,14 @@
+h2 {
+    margin-top: 50px;
+}
+
+.profile{
+    height: 100vh;
+    width: 100vw;
+}
+
+.loggedout{
+    margin-top: 50px;
+    color: red;
+    font-size: 25px;
+}
