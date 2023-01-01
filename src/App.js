@@ -15,20 +15,21 @@ function App() {
   
   return (
     <div className='App'>
-       <Title />
-    <BrowserRouter>
-        <Link to="/posts">Posts</Link>
-        <Link to="/profile">Profile</Link>
-        <Link to='/login'>Log In</Link>
-        <Link to='/home'>Home</Link>
-      <Routes>
-        <Route path='/newpost' element={<CreatePost />} />
-        <Route path='/' element={<Home />} />
-        <Route exact path='/login' element={<Login />} />
-        <Route exact path='/posts' element={<Posts />} />
-        <Route exact path='/profile' element={<Profile />} />
-      </Routes>
-    </BrowserRouter>
+      <Title />
+      <BrowserRouter>
+          <Link to="/posts">Posts</Link>
+          <Link to="/profile">Profile</Link>
+          <Link to='/login'>Log In</Link>
+          <Link to='/home'>Home</Link>
+        <Routes>
+          <Route path='/newpost' element={<CreatePost />} />
+          <Route path='/' element={<Home />} />
+          <Route exact path='/login' element={<Login />} />
+          <Route exact path='/posts' element={<Posts />} />
+          <Route exact path='/profile' element={<Profile />} />
+          <Route exact path='/home' element={<Home />} />
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }

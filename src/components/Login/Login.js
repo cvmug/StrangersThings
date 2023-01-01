@@ -68,7 +68,10 @@ export default function Login() {
         .then((response) => response.json())
         .then((result) => {
           console.log(result);
-          // navigate('/login'); // Navigate to the '/login' route
+          // Show a confirmation message
+          alert('Successfully registered! Please log in to continue.');
+          // Navigate to the '/login' route
+          navigate('/login');
         })
         .catch((error) => console.log(error));
 
@@ -139,6 +142,7 @@ export default function Login() {
               onChange={handleInputChange}
             />
             <button>Log In</button>
+            {error ? <p className='error'>{error}</p> : null}
           </form>
         ) : (
           <form onSubmit={handleSubmit}>
@@ -179,47 +183,4 @@ export default function Login() {
           };
     
     
-    
-    
   
-
-// export default function Login() {
-
-//     const adminUser = {
-//       username: "admin",
-//       password: "admin123"
-//     }
-  
-//     const [user, setUser] = useState({username:""});
-//     const [error, setError] = useState("");
-  
-//     const Login = details => {
-//       console.log(details);
-//       if (details.username == adminUser.username && details.password == adminUser.password) {
-//         console.log('Logged in');
-//         setUser({
-//           username: details.username
-//         })
-//       } else {
-//         console.log('Details do not match');
-//         setError('Details do not match');
-//       }
-//     }
-    
-//     const Logout = () => {
-//       setUser({ username:'' });
-//     }
-  
-//     return (
-//       <div className='App'>
-//           {(user.username !="") ? (
-//             <div className='welcome'>
-//               <h2>Welcome, <span>{user.username}</span></h2>
-//               <button onClick={Logout}>Logout</button>
-//               </div>
-//           ) : (
-//             <LoginForm Login={Login} error={error}/>
-//           )}
-// </div>
-//     )
-//           }

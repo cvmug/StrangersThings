@@ -5,6 +5,8 @@ import MessageButton from '../Messages/MessageButton';
 
 export default function Posts() {
   const [posts, setPosts] = useState([]);
+  const [filteredPosts, setFilteredPosts] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
   const [token, setToken] = useState(null);
   const [user, setUser] = useState({});
 
@@ -42,10 +44,29 @@ export default function Posts() {
       });
   }, [token]);
 
+  useEffect(() => {
+    const lowerCaseSearchTerm = searchTerm.toLowerCase();
+    const filtered = posts.filter((post) => {
+      return (
+        post.title.toLowerCase().includes(lowerCaseSearchTerm) ||
+        post.author.username.toLowerCase().includes(lowerCaseSearchTerm) ||
+        post.location.toLowerCase().includes(lowerCaseSearchTerm) ||
+        post.description.toLowerCase().includes(lowerCaseSearchTerm)
+      );
+    });
+    setFilteredPosts(filtered);
+  }, [searchTerm, posts]);
+
   return (
     <div className="posts">
       <h1>Posts</h1>
-      {posts.map((post) => (
+      <input
+        type="text"
+        placeholder="Search..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      />
+      {filteredPosts.map((post) => (
         <div key={post._id} className={post.isAuthor ? 'post author' : 'post'}>
           <>
             Title: {post.title}
@@ -64,8 +85,8 @@ export default function Posts() {
             <br />
             {post.isAuthor ? <button className='edit'>Edit</button> : null}
             {post.isAuthor ? <DeletePost postId={post._id} /> : null}
-            {!post.isAuthor ? <MessageButton postId={post._id} /> : null}
-            </>
+            {!post.isAuthor && token ? <MessageButton postId={post._id} /> : null}
+          </>
         </div>
       ))}
     </div>

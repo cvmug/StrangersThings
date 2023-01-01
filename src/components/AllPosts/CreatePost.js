@@ -18,7 +18,7 @@ export default function CreatePost() {
       description,
       price,
     };
-    
+
     try {
       // send the post to the API
       const response = await fetch('https://strangers-things.herokuapp.com/api/2209-FTB-MT-WEB-PT/posts', {
@@ -56,32 +56,32 @@ export default function CreatePost() {
     <form onSubmit={handleSubmit}>
       {successMessage && <div className="success">{successMessage}</div>}
       {error && <div className="error">{error}</div>}
-        <label htmlFor="title">Title:
-            <input
-              type="text"
-              id="title"
-              value={title}
-              onChange={(event) => setTitle(event.target.value)}
-            />
-        </label>
-        <label htmlFor="description">
-          Description:
-          <textarea
-            id="description"
-            value={description}
-            onChange={(event) => setDescription(event.target.value)}
-          />
-        </label>
-        <label htmlFor="price">
-          Price:
-          <input
-            type="text"
-            id="price"
-            value={price}
-            onChange={(event) => setPrice(event.target.value)}
-          />
-        </label>
-        <button type="submit">Create Post</button>
+      <label htmlFor="title">Title:
+        <input
+          type="text"
+          id="title"
+          value={title}
+          onChange={(event) => setTitle(event.target.value)}
+        />
+      </label>
+      <label htmlFor="description">
+        Description:
+        <textarea
+          id="description"
+          value={description}
+          onChange={(event) => setDescription(event.target.value)}
+        />
+      </label>
+      <label htmlFor="price">
+        Price:
+        <input
+          type="text"
+          id="price"
+          value={price}
+          onChange={(event) => setPrice(event.target.value)}
+        />
+      </label>
+      <button type="submit">Create Post</button>
     </form>
   );
 }

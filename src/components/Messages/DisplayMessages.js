@@ -36,7 +36,6 @@ const DisplayMessages = ({ userId, token }) => {
     sentMessages = messages.filter(message => message.fromUser === userId);
     receivedMessages = messages.filter(message => message.fromUser !== userId);
   }
-  
 
   return (
     <div>
