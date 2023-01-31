@@ -1,36 +1,22 @@
 import React, { useEffect, useState } from 'react';
+import { fetchUser } from '../api';
 import './Profile.css';
 import { Link } from 'react-router-dom';
 import DisplayMessages from './Messages/DisplayMessages';
 
 export default function Profile() {
-  const [token, setToken] = useState(null);
   const [user, setUser] = useState({});
   const [error, setError] = useState(null);
+  const token = window.localStorage.getItem('token');
 
-  useEffect(() => {
-    const token = window.localStorage.getItem('token');
-    setToken(token);
-    if (token) {
-      fetch('https://strangers-things.herokuapp.com/api/2209-FTB-MT-WEB-PT/users/me', {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-      })
-        .then((response) => response.json())
-        .then((result) => {
-          const user = result.data;
-          setUser(user);
-        })
-        .catch((error) => setError(error));
-    }
-  }, [token]);
+useEffect(() => {
+  fetchUser(token, setUser, setError);
+}, [token]);
 
   const handleLogout = () => {
     window.localStorage.removeItem('token');
-    setToken(null);
-  };
+    window.location.href = '/login';
+    }
 
   return (
     <div className="profile">
@@ -41,8 +27,8 @@ export default function Profile() {
           <button>
             <Link to="/newpost">New Post</Link>
           </button>
-          <button onClick={handleLogout}>Log out</button>
           <DisplayMessages userId={user._id} token={token} />
+          <button onClick={handleLogout}>Log out</button>
         </>
       ) : (
         <p className='loggedout'>

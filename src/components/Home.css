@@ -1,36 +1,35 @@
-  .home {
-    margin-top: 50px;
-    text-align: center;
-  }
-  
-  .home h1 {
-    margin: 20px 0;
-  }
-  
-  .home p {
-    font-size: 16px;
-    margin: 20px 0;
-    width: 80%;
-  }
-  
-  .home ul {
-    display: flex;
-    justify-content: space-around;
-    list-style: none;
-    margin: 20px 0;
-    width: 50%;
-  }
-  
-  .home li {
-    font-size: 16px;
-  }
-  
-  .home a {
-    color: #333;
-    text-decoration: none;
-  }
-  
-  .home a:hover {
-    color: #666;
-  }
-  
+.home {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+h1 {
+  font-size: 36px;
+  margin-bottom: 20px;
+}
+
+p {
+  font-size: 18px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+ul {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  margin: 0 10px;
+}
+
+a {
+  font-size: 18px;
+  text-decoration: none;
+  color: black;
+}

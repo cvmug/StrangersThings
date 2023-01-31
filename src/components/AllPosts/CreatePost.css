@@ -1,3 +1,55 @@
-form {
-    margin-top: 50px;
-}
+.CreatePost {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    margin: 50px auto;
+    padding: 20px;
+    width: 50%;
+    background-color: #f2f2f2;
+    border-radius: 10px;
+  }
+  
+  .CreatePost label {
+    margin-top: 10px;
+    font-weight: bold;
+  }
+  
+  .CreatePost input[type="text"],
+  .CreatePost textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 5px;
+    border: 1px solid gray;
+    font-size: 16px;
+  }
+  
+  .CreatePost button[type="submit"] {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .CreatePost .success {
+    margin-top: 20px;
+    background-color: lightgreen;
+    padding: 10px;
+    border-radius: 5px;
+    color: green;
+    font-size: 16px;
+  }
+  
+  .CreatePost .error {
+    margin-top: 20px;
+    background-color: lightcoral;
+    padding: 10px;
+    border-radius: 5px;
+    color: red;
+    font-size: 16px;
+  }
+  

@@ -79,9 +79,18 @@ export default function Posts() {
             <br />
             Price: {post.price}
             <br />
-            Created at: {post.createdAt}
-            <br />
-            Updated at: {post.updatedAt}
+            Created at: {new Date(post.createdAt).toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+              })}
+              <br />
+              Updated at: {new Date(post.createdAt).toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+              })}
+
             <br />
             {post.isAuthor ? <button className='edit'>Edit</button> : null}
             {post.isAuthor ? <DeletePost postId={post._id} /> : null}

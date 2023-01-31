@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from 'react';
+import './DisplayMessages.css'
 
 const DisplayMessages = ({ userId, token }) => {
   const [messages, setMessages] = useState([]);
   const [error, setError] = useState(null);
+  const [sentExpanded, setSentExpanded] = useState(false);
+  const [receivedExpanded, setReceivedExpanded] = useState(false);
   
   useEffect(() => {
     console.log('making API call');
-    fetch(`https://strangers-things.herokuapp.com/api/2209-FTB-MT-WEB-PT/posts/${userId}/messages`, {
+    fetch('https://strangers-things.herokuapp.com/api/2209-FTB-MT-WEB-PT/users/me', {
       headers: {
-        'Authorization': `Bearer ${token}`
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
       }
     })
       .then(response => {
@@ -19,51 +23,65 @@ const DisplayMessages = ({ userId, token }) => {
         return response.json();
       })
       .then(result => {
-        console.log('setting messages', result.data);
-        setMessages(result.data);
+        setMessages(result.data.messages);
+        console.log('setting messages', result.data.messages);
       })
       .catch(error => {
         console.log('error occurred', error);
         setError(error);
       });
   }, [userId, token]);
-  
-  console.log('rendering messages', messages);
-  let sentMessages = [];
-  let receivedMessages = [];
-  
-  if (Array.isArray(messages)) {
-    sentMessages = messages.filter(message => message.fromUser === userId);
-    receivedMessages = messages.filter(message => message.fromUser !== userId);
-  }
 
+    
   return (
-    <div>
-      {error && <p>An error occurred: {error.message}</p>}
-      <h2>Sent Messages</h2>
-      {sentMessages && sentMessages.length > 0 ? (
-        sentMessages.map(message => (
-          <div className="message-container" key={message._id}>
-            <h3>{message.toUser}</h3>
-            <p>{message.content}</p>
-          </div>
-        ))
-      ) : (
-        <p>No sent messages to display</p>
+    <div className='display-messages'>
+      
+      <h2 onClick={() => setSentExpanded(!sentExpanded)}>
+        Sent Messages {sentExpanded ? '▲' : '▼'}
+      </h2>
+      {sentExpanded && (
+        <div>
+          {messages && messages.length > 0 ? (
+            messages
+              .filter(message => message.fromUser._id === userId)
+              .map(message => (
+                <div className='message-section' key={message._id}>
+                  <p className='message-header'>Post: {message.post.title}</p>
+                  <div className='message-content'>
+                  <p>To: {message.fromUser.username}</p>
+                  <p>Message: {message.content}</p>
+                  </div>
+                </div>
+              ))
+          ) : (
+            <p>No sent messages to display</p>
+          )}
+        </div>
       )}
-      <h2>Received Messages</h2>
-      {receivedMessages && receivedMessages.length > 0 ? (
-        receivedMessages.map(message => (
-          <div className="message-container" key={message._id}>
-            <h3>{message.fromUser}</h3>
-            <p>{message.content}</p>
-          </div>
-        ))
-      ) : (
-        <p>No received messages to display</p>
+      <h2 onClick={() => setReceivedExpanded(!receivedExpanded)}>
+        Received Messages {receivedExpanded ? '▲' : '▼'}
+      </h2>
+      {receivedExpanded && (
+        <div>
+          {messages && messages.length > 0 ? (
+            messages
+              .filter(message => message.fromUser._id !== userId)
+              .map(message => (
+                <div className='message-section' key={message._id}>
+                  <p className='message-header'>Post: {message.post.title}</p>
+                  <div className='message-content'>
+                  <p>To: {message.fromUser.username}</p>
+                  <p>Message: {message.content}</p>
+                  </div>
+                </div>
+              ))
+          ) : (
+            <p>No received messages to display</p>
+          )}
+        </div>
       )}
     </div>
   );
 };
 
-export default DisplayMessages
+export default DisplayMessages;

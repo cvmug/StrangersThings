@@ -1,186 +1,74 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { BASE_URL } from '../../api';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
+import './Login.css';
 
-export default function Login() {
-  const [token, setToken] = useState(null);
-  const [user, setUser] = useState({});
-  const [form, setForm] = useState('login');
-  const [registerUsername, setRegisterUsername] = useState('');
-  const [registerPassword, setRegisterPassword] = useState('');
-  const [loginUsername, setLoginUsername] = useState('');
-  const [loginPassword, setLoginPassword] = useState('');
-  const [error, setError] = useState('');
-  const navigate = useNavigate();
+const Login = () => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState(null);
+  const token = window.localStorage.getItem('token');
 
-  useEffect(() => {
-    const token = window.localStorage.getItem('token');
-    setToken(token)
-    if (token) {
-      fetch('https://strangers-things.herokuapp.com/api/2209-FTB-MT-WEB-PT/users/me', {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-      })
-        .then((response) => response.json())
-        .then((result) => {
-          const user = result.data;
-          setUser(user);
-        })
-        .catch((error) => console.log(error));
-    }
-  }, [token]);
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const result = await axios.post(`${BASE_URL}/users/login`, {
+      user: {
+        username,
+        password,
+      },
+    });
 
-  const handleFormChange = (e) => {
-    e.preventDefault();
-    setForm(e.target.name);
-  };
-
-  const handleInputChange = (e) => {
-    e.preventDefault();
-    const { name, value } = e.target;
-    if (name === 'registerUsername') {
-      setRegisterUsername(value);
-    } else if (name === 'registerPassword') {
-      setRegisterPassword(value);
-    } else if (name === 'loginUsername') {
-      setLoginUsername(value);
-    } else if (name === 'loginPassword') {
-      setLoginPassword(value);
-    }
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (form === 'register') {
-      fetch('https://strangers-things.herokuapp.com/api/2209-FTB-MT-WEB-PT/users/register', {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          user: {
-            username: registerUsername,
-            password: registerPassword
-          },
-        }),
-      })
-        .then((response) => response.json())
-        .then((result) => {
-          console.log(result);
-          // Show a confirmation message
-          alert('Successfully registered! Please log in to continue.');
-          // Navigate to the '/login' route
-          navigate('/login');
-        })
-        .catch((error) => console.log(error));
-
+    if (result.data.error) {
+      setError(result.data.error);
     } else {
-
-      fetch('https://strangers-things.herokuapp.com/api/2209-FTB-MT-WEB-PT/users/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          user: {
-            username: loginUsername,
-            password: loginPassword,
-          },
-        }),
-      })
-        .then((response) => response.json())
-        .then((result) => {
-          const token = result.data.token;
-          window.localStorage.setItem('token', token);
-          fetch('https://strangers-things.herokuapp.com/api/2209-FTB-MT-WEB-PT/users/me', {
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`,
-            },
-          })
-            .then((response) => response.json())
-            .then((result) => {
-              const user = result.data;
-              setUser(user);
-              navigate('/profile')
-            })
-            .catch((console.error));
-        })
-        .catch((error) => {
-          setError('Invalid username or password'); // added error handling
-          console.log(error);
-        });
+      const token = result.data.data.token;
+      window.localStorage.setItem('token', token);
+      window.location.href = '/profile';
     }
   };
-  
-    const logout = () => {
-      window.localStorage.removeItem('token');
-      setUser({});
-    };
-  
+
+  const handleLogout = () => {
+    window.localStorage.removeItem('token');
+    window.location.href = '/login';
+    }
+
     return (
-      <div>
-        <h1>{form === 'login' ? 'Log In' : 'Register'}</h1>
-        {user._id ? (
-       <>
-         <button onClick={logout}>Logout</button>
-       </>
-     ) : null}
-        {form === 'login' ? (
-          <form onSubmit={handleSubmit}>
-            <input
-              placeholder="username"
-              name="loginUsername"
-              value={loginUsername}
-              onChange={handleInputChange}
-            />
-            <input type='password'
-              placeholder="password"
-              name="loginPassword"
-              value={loginPassword}
-              onChange={handleInputChange}
-            />
-            <button>Log In</button>
-            {error ? <p className='error'>{error}</p> : null}
-          </form>
+      <div className="Login">
+        {error &&
+          <div className="Login-error">
+            <p>{error.name}</p>
+            <p>{error.message}</p>
+          </div>
+        }
+        {localStorage.getItem('token') ? (
+          <div className="Login-message">
+          <button onClick={handleLogout}>Log out</button>
+          </div>
         ) : (
-          <form onSubmit={handleSubmit}>
+          <form className="Login-form" onSubmit={handleSubmit}>
             <input
-              placeholder="username"
-              name="registerUsername"
-              value={registerUsername}
-              onChange={handleInputChange}
+              className="Login-input"
+              type="text"
+              placeholder="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
             />
-            <input type='password'
-              placeholder="password"
-              name="registerPassword"
-              value={registerPassword}
-              onChange={handleInputChange}
+            <input
+              className="Login-input"
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
-            <button>Register</button>
+            <button className="Login-submit" type="submit">Login</button>
+            <div className="Login-register">
+              Don't have an account? <Link to="/register">Register</Link>
+            </div>
           </form>
         )}
-        <div>
-          {form === 'login' ? (
-            <p>
-              Don't have an account?{' '}
-              <a href="#" name="register" onClick={handleFormChange}>
-                Register
-              </a>
-            </p>
-          ) : (
-            <p>
-              Already have an account?{' '}
-              <a href="#" name="login" onClick={handleFormChange}>
-                Log In
-              </a>
-            </p>
-          )}
-        </div>
-        </div>
+      </div>
     );
-          };
-    
-    
-  
+  };
+
+export default Login;

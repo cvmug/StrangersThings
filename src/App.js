@@ -5,6 +5,7 @@ import Posts from './components/AllPosts/Posts';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import Profile from './components/Profile';
 import Login from './components/Login/Login';
+import Register from './components/Login/Register';
 import './App.css';
 import CreatePost from './components/AllPosts/CreatePost';
 import Home from './components/Home';
@@ -25,6 +26,7 @@ function App() {
           <Route path='/newpost' element={<CreatePost />} />
           <Route path='/' element={<Home />} />
           <Route exact path='/login' element={<Login />} />
+          <Route exact path='/register' element={<Register />} />
           <Route exact path='/posts' element={<Posts />} />
           <Route exact path='/profile' element={<Profile />} />
           <Route exact path='/home' element={<Home />} />

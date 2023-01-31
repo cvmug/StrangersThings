@@ -53,7 +53,7 @@ export default function CreatePost() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className='CreatePost' onSubmit={handleSubmit}>
       {successMessage && <div className="success">{successMessage}</div>}
       {error && <div className="error">{error}</div>}
       <label htmlFor="title">Title:
